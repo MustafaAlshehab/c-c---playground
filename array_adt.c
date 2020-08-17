@@ -256,17 +256,17 @@ void rearrange(Array_t *array) {
 Array_t * merge(Array_t *array1, Array_t *array2) {
     int i = 0, j = 0, k = 0;
     Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
-    while (array1->A[i] && array2->A[j]) {
+    while (i < array1->length && j < array2->length) {
         if (array1->A[i] < array2->A[j]) {
             array3->A[k++] = array1->A[i++]; 
         } else {
             array3->A[k++] = array2->A[j++];
         }
     }
-    while (array1->A[i]) {
+    while (i < array1->length) {
         array3->A[k++] = array1->A[i++];
     }
-    while (array2->A[j]) {
+    while (j < array2->length) {
         array3->A[k++] = array2->A[j++];
     }
     array3->length = array1->length + array2->length;
@@ -298,7 +298,7 @@ int main() {
     display(&array1);
 
     Array_t array2 = {{1,4,6,7,9}, 10, 5};
-    Array_t array3 = {{2,3,4,5,10}, 10, 5};
+    Array_t array3 = {{0,3,4,5,10}, 10, 5};
     Array_t *merged_array;
     display(&array2);
     display(&array3);
