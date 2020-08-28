@@ -81,7 +81,8 @@ void linear_search(Array_t *array, int input) {
     }
     printf("\nERROR: Input %d is NOT found\n", input);
 }
-// assuming that the array is already sorted and contains unique array numbers
+
+// assuming that the array is already sorted and contains unique array elements
 void binary_search(Array_t *array, int input) {
     if (array->length < 1) {
         printf("\nERROR: array length is less than one\n");
@@ -106,7 +107,8 @@ void binary_search(Array_t *array, int input) {
     printf("\nERROR: Input %d is NOT found\n", input);
     return;
 }
-// assuming that the array is already sorted and contains unique array numbers
+
+// assuming that the array is already sorted and contains unique array elements
 void binary_search_recursive(Array_t *array, int input, int low, int high) {
     if (array->length < 1) {
         printf("\nERROR: array length is less than one\n");
@@ -227,6 +229,7 @@ void insert_sorted(Array_t *array, int input) {
     array->length++;
 }
 
+// check if a given array of elements is sorted 
 bool is_sorted(Array_t *array) {
     int i = 0;
     while (i < array->length - 1) {
@@ -269,10 +272,112 @@ Array_t * merge(Array_t *array1, Array_t *array2) {
     while (j < array2->length) {
         array3->A[k++] = array2->A[j++];
     }
+
     array3->length = array1->length + array2->length;
     array3->size = 10;
+
     return array3;
 }
+
+// combine 2 unsorted arrays into one without duplicate
+// Tine complexity O(N^2)
+Array_t * union_unsorted(Array_t *array1, Array_t *array2) {
+    int i = 0, j = 0, k = 0;
+    Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    while(i < array1->length) {
+        array3->A[k++] = array1->A[i++];
+        array3->length++;
+    }
+    while(j < array2->length) {
+       bool value_exist = false;
+       for (int c = 0; c < array3->length; c++) {
+           if(array2->A[j] == array3->A[c]) {
+               value_exist = true;
+           }
+       }
+       if (value_exist == false) {
+           array3->A[k++] = array2->A[j++];
+       }
+    }
+
+    array3->length = k;
+    array3->size = 10;
+
+    return array3;
+}
+
+// combine 2 sorted arrays into one without duplicate
+// Tine complexity O(N)
+Array_t * union_sorted(Array_t *array1, Array_t *array2) {
+    int i = 0, j = 0, k = 0;
+    Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    while ( i < array1->length ) {
+        if (array1->A[i] < array2->A[j]) {
+            array3->A[k++] = array1->A[i++];
+        } else if (array1->A[i] == array2->A[j]) {
+            array3->A[k++] = array1->A[i++];
+            j++;
+        } else {
+            array3->A[k++] = array2->A[j++];
+        }
+    }
+    while ( i < array1->length ) {
+        array3->A[k++] = array1->A[i++];
+    }
+    
+    while ( j < array2->length ) {
+        array3->A[k++] = array2->A[j++];
+    }
+
+    array3->length = k;
+    array3->size = 10;
+
+    return array3;
+}
+
+// store only common elements from first and second 
+// array into a new array
+// Tine complexity O(N^2)
+Array_t * intersection_unsorted(Array_t *array1, Array_t *array2) {
+    int i = 0, j = 0, k = 0;
+    Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    for( ; i < array1->length; i++ ) {
+        for ( ; j < array2->length; j++ ) {
+            if ( array1->A[i] == array2->A[j] ) {
+                array3->A[k++] = array1->A[i];
+                break;
+            }
+        }
+    }
+    array3->length = k;
+    array3->size = 10;
+
+    return array3;
+}
+
+// store only common elements from first and second 
+// array into a new array
+// Tine complexity O(N)
+Array_t * intersection_sorted(Array_t *array1, Array_t *array2) {
+    int i = 0, j = 0, k = 0;
+    Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    while ( i < array1->length ) {
+        if (array1->A[i] < array2->A[j]) {
+            i++;
+        } else if (array1->A[i] == array2->A[j]) {
+            array3->A[k++] = array1->A[i++];
+            j++;
+        } else {
+            j++;
+        }
+    }
+
+    array3->length = k;
+    array3->size = 10;
+
+    return array3;
+}
+
 int main() {
     Array_t array1 = {{1,5,6,9,99}, 10, 5};
     display(&array1);
