@@ -256,7 +256,7 @@ void rearrange(Array_t *array) {
 }
 
 // merge 2 sorted arrays into one array
-Array_t * merge(Array_t *array1, Array_t *array2) {
+Array_t * merge_sorted(Array_t *array1, Array_t *array2) {
     int i = 0, j = 0, k = 0;
     Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
     while (i < array1->length && j < array2->length) {
@@ -284,23 +284,25 @@ Array_t * merge(Array_t *array1, Array_t *array2) {
 Array_t * union_unsorted(Array_t *array1, Array_t *array2) {
     int i = 0, j = 0, k = 0;
     Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    array3->length = 0;
     while(i < array1->length) {
         array3->A[k++] = array1->A[i++];
         array3->length++;
     }
-    while(j < array2->length) {
+    for( ;j < array2->length; j++) {
        bool value_exist = false;
        for (int c = 0; c < array3->length; c++) {
            if(array2->A[j] == array3->A[c]) {
                value_exist = true;
+               break;
            }
        }
        if (value_exist == false) {
-           array3->A[k++] = array2->A[j++];
+           array3->A[k++] = array2->A[j];
+           array3->length++;
        }
     }
 
-    array3->length = k;
     array3->size = 10;
 
     return array3;
@@ -311,7 +313,7 @@ Array_t * union_unsorted(Array_t *array1, Array_t *array2) {
 Array_t * union_sorted(Array_t *array1, Array_t *array2) {
     int i = 0, j = 0, k = 0;
     Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
-    while ( i < array1->length ) {
+    while ( i < array1->length && j < array2->length ) {
         if (array1->A[i] < array2->A[j]) {
             array3->A[k++] = array1->A[i++];
         } else if (array1->A[i] == array2->A[j]) {
@@ -361,7 +363,7 @@ Array_t * intersection_unsorted(Array_t *array1, Array_t *array2) {
 Array_t * intersection_sorted(Array_t *array1, Array_t *array2) {
     int i = 0, j = 0, k = 0;
     Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
-    while ( i < array1->length ) {
+    while ( i < array1->length && j < array2->length ) {
         if (array1->A[i] < array2->A[j]) {
             i++;
         } else if (array1->A[i] == array2->A[j]) {
@@ -378,37 +380,75 @@ Array_t * intersection_sorted(Array_t *array1, Array_t *array2) {
     return array3;
 }
 
-int main() {
-    Array_t array1 = {{1,5,6,9,99}, 10, 5};
-    display(&array1);
-    insert(&array1,10,1);
-    display(&array1);
-    linear_search(&array1,1);
-    binary_search(&array1,102);
-    display(&array1);
-    binary_search(&array1,5);
-    binary_search_recursive(&array1,10,0,array1.length - 1);
-    delete(&array1,1);
-    display(&array1);
-    set(&array1, 1, 50);
-    display(&array1);
-    printf("\nMax value is %d\n", max(&array1));
-    printf("\nMin value is %d\n", min(&array1));
-    printf("\nAverage value is %f\n", average(&array1));
-    reverse(&array1);
-    display(&array1);
-    right_shift(&array1);
-    display(&array1);
-    left_shift(&array1);
-    display(&array1);
+// store elements in first array that are
+// not in second array into a new array
+// Tine complexity O(N^2)
+Array_t * difference_unsorted(Array_t *array1, Array_t *array2) {
+    int i = 0, j = 0, k = 0;
+    Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    for( ; i < array1->length; i++ ) {
+        bool element_match = false;
+        for ( ; j < array2->length; j++ ) {
+            if ( array1->A[i] == array2->A[j] ) {
+                element_match = true;
+                break;
+            }
+        }
+        if (element_match == false)
+        {
+            array3->A[k++] = array1->A[i];
+        }
+    }
 
-    Array_t array2 = {{1,4,6,7,9}, 10, 5};
-    Array_t array3 = {{0,3,4,5,10}, 10, 5};
-    Array_t *merged_array;
+    array3->length = k;
+    array3->size = 10;
+
+    return array3;
+}
+
+// store elements in first array that are
+// not in second array into a new array
+// Tine complexity O(N)
+Array_t * difference_sorted(Array_t *array1, Array_t *array2) {
+    int i = 0, j = 0, k = 0;
+    Array_t *array3 = (Array_t *)malloc(sizeof(Array_t));
+    while ( i < array1->length && j < array2->length ) {
+        if (array1->A[i] == array2->A[j]) {
+            i++;
+            j++;
+        } else if (array1->A[i] < array2->A[j]) {
+            array3->A[k++] = array1->A[i++];
+        } else {
+            j++;
+        }
+    }
+    
+    while (i < array1->length) {
+        array3->A[k++] = array1->A[i++];
+    }
+    
+    array3->length = k;
+    array3->size = 10;
+
+    return array3;
+}
+
+int main() {
+    Array_t array2 = {{4,6,10,16,19}, 10, 5};
+    Array_t array3 = {{3,4,6,8,15}, 10, 5};
+
+    Array_t *merged_array,  *union_array, *intersection_array, *difference_array;
     display(&array2);
     display(&array3);
-    merged_array = merge(&array2,&array3);
-    display(merged_array);
+
+    union_array = union_sorted(&array2,&array3);
+    display(union_array);
+
+    intersection_array = intersection_sorted(&array2,&array3);
+    display(intersection_array);
+
+    difference_array = difference_sorted(&array2,&array3);
+    display(difference_array);
 
     return 0;
 }
