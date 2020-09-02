@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 typedef struct Array {
-    int A[10];
+    int *A;
     int size;
     int length;
 }Array_t;
@@ -13,32 +13,29 @@ void display(Array_t *array) {
         printf("\nNo elements to display\n");
         return;
     }
-    int i = 0;
     printf("\nArray elements: ");
-    while(i < array->length) {
+    for(int i = 0; i < array->length; i++) {
         printf("%d ", array->A[i]);
-        i++;
     }
     printf("\n");
 }
 
 void insert(Array_t *array, int input, int index) {
     if (index < 0 || index > array->length) {
-        printf("\nERROR: inserting index %d - index cannot be negative or greater than length\n", index);
+        printf("\nERROR: inserting index %d index cannot be negative or greater than length\n", index);
         return;
     }
     int i = array->length;
-    while (i > index)
+    for (; i > index; i--)
     {
         array->A[i] = array->A[i-1];
-        i--;
     }
     array->A[i] = input;
     array->length++;
 }
 
 void append(Array_t *array, int input) {
-    if (array->length > array->size) {
+    if (array->length >= array->size) {
         printf("\nERROR: there is no more avaliable space to store %d in the array\n", input);
         return;
     }
@@ -52,24 +49,24 @@ void delete(Array_t *array, int index) {
         return;
     }
 
-    int i = index;
-    while (i < array->length - 1)
+    for (int i = index; i < array->length - 1; i++)
     {
         array->A[i] = array->A[i+1];
-        i++;
     }
     array->length--;
 }
+
+// helper function
 void swap(int *x, int *y) {
     int temp;
     temp = *x;
     *x = *y;
     *y = temp;
 }
+
 // assuming you have unique array numbers
 void linear_search(Array_t *array, int input) {
-    int i = 0;
-    while (i < array->length) {
+    for (int i = 0; i < array->length; i++) {
         if(array->A[i] == input) {
             printf("\nInput %d is found at index %d\n", input, i);
             //this is for linear search improvement efforts in case you have 
@@ -77,7 +74,6 @@ void linear_search(Array_t *array, int input) {
             swap(&array->A[i], &array->A[0]);
             return;
         }
-        i++;
     }
     printf("\nERROR: Input %d is NOT found\n", input);
 }
@@ -433,22 +429,67 @@ Array_t * difference_sorted(Array_t *array1, Array_t *array2) {
     return array3;
 }
 
+void program_menu() {
+    Array_t array1;
+    int choice, input, index;
+
+    printf("\nEnter a size of an array: ");;
+    while (scanf("%d", &array1.size) == 0) {
+        printf("\nPlease Enter a valid input\n");
+        int c;
+        while((c=getchar())!='\n' && c!=EOF);
+    }
+    array1.A = (int *)malloc(array1.size * sizeof(int));
+    array1.length = 0;
+
+    do {
+        printf("\n\nMain Menu\n");
+        printf("1. Insert\n");
+        printf("2. Append\n");
+        printf("3. Delete\n");
+        printf("4. Search\n");
+        printf("5. Sum\n");
+        printf("6. Display\n");
+        printf("7. Exit\n");
+
+        printf("Enter a choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter an element followed by an index: ");
+            scanf("%d%d", &input, &index);
+            insert(&array1,input,index);
+            break;
+        case 2: 
+            printf("Enter an index to append: ");
+            scanf("%d", &input);
+            append(&array1, input);    
+            break;
+        case 3: 
+            printf("Enter an index to delete: ");
+            scanf("%d", &index);
+            delete(&array1, index);    
+            break;
+        case 4:
+            printf("Enter an element to search for: ");
+            scanf("%d", &input);
+            linear_search(&array1, input);
+            break;
+        case 5:
+            printf("The sum of the elements is: %d\n", sum(&array1));
+            break;
+        case 6:
+            display(&array1);       
+        }
+    } while(choice < 7);
+
+}
+
 int main() {
-    Array_t array2 = {{4,6,10,16,19}, 10, 5};
-    Array_t array3 = {{3,4,6,8,15}, 10, 5};
-
-    Array_t *merged_array,  *union_array, *intersection_array, *difference_array;
-    display(&array2);
-    display(&array3);
-
-    union_array = union_sorted(&array2,&array3);
-    display(union_array);
-
-    intersection_array = intersection_sorted(&array2,&array3);
-    display(intersection_array);
-
-    difference_array = difference_sorted(&array2,&array3);
-    display(difference_array);
+    
+    program_menu();
 
     return 0;
 }
