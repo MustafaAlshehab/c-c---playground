@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 
-void swap_str(const char **str1, const char**str2);
+void swap_str(const char **str1, const char **str2);
 void swap_int(int *a, int *b);
 int main() {
 
