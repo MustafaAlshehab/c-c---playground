@@ -1,7 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
+
+
+int fib_rec_memoization_helper(int n, int fib_results[]);
 
 // Time complexity here is O(2^2)
-// Space complixty will be O(n)
+// Space complexity will be O(n)
 int fib_rec (int n) {
     if (n == 1) {
         return 0;
@@ -11,25 +15,31 @@ int fib_rec (int n) {
         return fib_rec(n - 1) + fib_rec(n - 2);
     }
 }
+
+// make use of dynamic programming
 // time complexity O(n)
-// you will have n + 1 function function calls
-// Space complixty will be O(n)
+// Space complexity will be O(n)
 int fib_rec_memoization (int n) {
-    static int result[50] = {0,1};
+    int *fib_results = (int *)malloc(sizeof(int) * n);
+    fib_results[0] = 0;
+    fib_results[1] = 1;
+    return fib_rec_memoization_helper(n, fib_results);
+}
+
+int fib_rec_memoization_helper(int n, int fib_results[]) {
     if (n == 1) {
-        return result[0];
+        return fib_results[0];
     } else if (n == 2) {
-        return result[1];
-    } else if (result[n] > 0) {
-        return result[n];
+        return fib_results[1];
     } else {
-        result[n] = fib_rec_memoization(n - 1) + fib_rec_memoization(n - 2);
-        return result[n];
+        fib_results[n - 1] = fib_rec_memoization_helper(n - 1, fib_results) + fib_rec_memoization_helper(n - 2, fib_results);
+        return fib_results[n - 1];
     }
 }
+
 // Time complexity here is O(n)
-// Space complixty will be O(1)
-int fib_itirative(int n){
+// Space complexity will be O(1)
+int fib_iterative(int n) {
     int a = 0, b = 1;
     if ( n == 1) {
         return a;
@@ -46,9 +56,10 @@ int fib_itirative(int n){
         return b;
     }
 }
+
 int main() {
     
-    int result =  fib_itirative(12);
+    int result =  fib_rec_memoization(30);
     printf("result is: %d\n", result);
     
     return 0;
