@@ -21,16 +21,17 @@ int fib_rec (int n) {
 // Space complexity will be O(n)
 int fib_rec_memoization (int n) {
     int *fib_results = (int *)malloc(sizeof(int) * n);
+    for(int i = 0; i < n; i++) {
+        fib_results[i] = -1;
+    }
     fib_results[0] = 0;
     fib_results[1] = 1;
     return fib_rec_memoization_helper(n, fib_results);
 }
 
 int fib_rec_memoization_helper(int n, int fib_results[]) {
-    if (n == 1) {
-        return fib_results[0];
-    } else if (n == 2) {
-        return fib_results[1];
+    if (fib_results[n - 1] != -1) {
+        return fib_results[n - 1];
     } else {
         fib_results[n - 1] = fib_rec_memoization_helper(n - 1, fib_results) + fib_rec_memoization_helper(n - 2, fib_results);
         return fib_results[n - 1];
@@ -59,7 +60,7 @@ int fib_iterative(int n) {
 
 int main() {
     
-    int result =  fib_rec_memoization(30);
+    int result =  fib_rec_memoization(5);
     printf("result is: %d\n", result);
     
     return 0;
