@@ -62,6 +62,7 @@ void find_missing_elements_unsorted2(int array[], int size) {
         if ( array[i] > max_number) {
             max_number = array[i];
         }
+        max_number += 1;
     }
     int * hash = (int *)malloc(sizeof(int) * max_number);
 
