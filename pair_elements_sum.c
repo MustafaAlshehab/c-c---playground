@@ -43,13 +43,29 @@ void finding_pair_unsorted_hash(int array[], int size, int target) {
     }
 }
 
+// Time complexity O(N)
+// Space complexity O(1)
+void finding_pair_sorted(int array[], int size, int target) {
+    int i = 0; int j = size - 1;
+    while (i < j)
+    {
+        if (array[i] + array[j] > target) {
+            j--;
+        } else if (array[i] + array[j] < target) {
+            i++;
+        } else {
+            printf("\n%d + %d = %d\n", array[i], array[j], target);
+            i++; j++;
+        }
+    }
+}
 
 
 
 int main() {
 
     int array_unsorted[] = {6,3,8,10,16,7,5,2,9,14};
-    int array_sorted[] = {1,1,1,2,8,9,10,10,101,102,102};
+    int array_sorted[] = {1,3,4,5,6,8,9,10,12,14};
     int target = 10;
     finding_pair_unsorted_hash(array_unsorted,ARRAY_SIZE(array_unsorted), target);
     finding_pair_unsorted(array_unsorted, ARRAY_SIZE(array_unsorted), target);
