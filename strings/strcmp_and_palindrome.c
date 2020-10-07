@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+// Time complexity O(N)
+// Space complexity O(1)
 int strcmp_clone(const char *string1, const char *string2) {
     int i = 0;
     for(; string1[i] != '\0'; i++) {
@@ -18,6 +20,8 @@ int strcmp_clone(const char *string1, const char *string2) {
     return 0;
 }
 
+// Time complexity O(N)
+// Space complexity O(1)
 int strcmp_clone2(const char *string1, const char *string2) {
     int i = 0;
     for(; string1[i] != '\0'; i++) {
@@ -35,6 +39,8 @@ int strcmp_clone2(const char *string1, const char *string2) {
         }
 }
 
+// Time complexity O(N)
+// Space complexity O(1)
 int is_palindrome(const char *string) {
     int length = strlen(string);
     for(int i = 0, j = length - 1; i < j; i++, j--) {
