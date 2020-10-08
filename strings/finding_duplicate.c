@@ -23,7 +23,7 @@ void finding_duplicate(char *string) {
 }
 
 // Time complexity O(N)
-// Space complexity O(N)
+// Space complexity O(1)
 void finding_duplicate_hash(const char *string) {
     int hash[96] = {0};
     int hash_length = sizeof(hash) / sizeof(hash[0]);
