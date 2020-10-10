@@ -37,11 +37,36 @@ void finding_duplicate_hash(const char *string) {
     }   
 }
 
+// Time complexity O(N)
+// Space complexity O(1)
+// The disadvantage of this method when compared to hash method 
+// is that you cannot keep track of how many times a duplicate
+// has occurred without allocating more space. But it uses much
+// less space, tough, both are O(1) in terms of space
+// this implementation covers only small case letter assuming 
+// size of int is 4 bytes you may extend that by using long int 
+void finding_duplicate_bitwise(const char *string) {
+    int hash_bitwise = 0;
+    for(int i = 0; string[i] != '\0'; i++) {
+        if(string[i] >= 'a' && string[i] <= 'z') {
+            if(hash_bitwise & 1 << (string[i] - 97)) {
+                printf("%c is duplicated\n", string[i]);
+            }
+            else {
+                hash_bitwise |= 1 << (string[i] - 97); 
+            }
+        }
+    }
+}
+
 int main()
 {
     char str1[] = "hello world!!";
     finding_duplicate_hash(str1);
     finding_duplicate(str1);
+
+    char str2[] = "hello, this is a test";
+    finding_duplicate_bitwise(str2);
 
     return 0;
 }
