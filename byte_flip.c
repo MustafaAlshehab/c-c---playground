@@ -1,26 +1,50 @@
+/* A program to show the process of flipping bytes of 
+   a hex number. I used both shiting right and left bitwise
+   operations as well as & (masking) for bits checking and | (merging)
+   to set bits.
+*/
 #include <stdio.h>
 
 int main() {
     
-    long long unsigned hex = 0xf12af4da;
-    long long unsigned hex_flipped;
-    unsigned bytes[4];
-    bytes[0] = hex & 0xff;
-    bytes[1] = hex & 0xff00;
-    bytes[2] = hex & 0xff0000;
-    bytes[3] = hex & 0xff000000;
+    unsigned hex = 0xf12af4da;
+    unsigned hex_flipped = 0;
 
-    printf("the value in hex is %llx\n", hex);
-    printf("last byte is %llx\n", bytes[0]);
-    printf("third byte is %llx\n", bytes[1]);
-    printf("second byte is %llx\n", bytes[2]);
-    printf("first byte is %llx\n", bytes[3]);
-    int i = 0;
-    while (i < 4) {
-        hex_flipped = bytes[i];
-        hex_flipped = hex_flipped >> 8;
-        i++;
+    // THIS COMMENTED CODE TO SHOW THE PROCESS 
+    // OF FIGURING OUT THE FOR LOOP SOLUTION
+    // unsigned byte[4];
+    // byte[0] = hex & 0xff;
+    // byte[0] <<= 24;
+    // byte[1] = hex & (0xff << 8);
+    // byte[1] <<= 8;
+    // byte[2] = hex & (0xff << 16);
+    // byte[2] >>= 8;
+    // byte[3] = hex & (0xff << 24);
+    // byte[3] >>= 24;
+
+
+    // printf("the value in hex is %x\n", hex);
+
+    // printf("byte1 is %x\n", byte[0]);
+    // printf("byte[1] is %x\n", byte[1]);
+    // printf("byte2 is %x\n", byte[2]);
+    // printf("byte4 is %x\n", byte[3]);
+    
+    printf("Value of hex is %x\n", hex);
+
+    for(int i = 0, j = 3; i < 4; i++, j--) {
+        if(i < j) {
+            unsigned byte = hex & (0xff << i * 8);
+            byte <<= (j - i) * 8;
+            hex_flipped |= byte;
+        } else {
+            unsigned byte = hex & (0xff << i * 8);
+            byte >>= (i - j) * 8;
+            hex_flipped |= byte;
+        }
     }
-    printf("hex value flipped is %llx\n", hex_flipped);
+
+    printf("Value of flipped hex is %x\n", hex_flipped);
+
     return 0;
 }
