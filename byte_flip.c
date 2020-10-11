@@ -25,10 +25,10 @@ int main() {
 
     // printf("the value in hex is %x\n", hex);
 
-    // printf("byte1 is %x\n", byte[0]);
+    // printf("byte[0] is %x\n", byte[0]);
     // printf("byte[1] is %x\n", byte[1]);
-    // printf("byte2 is %x\n", byte[2]);
-    // printf("byte4 is %x\n", byte[3]);
+    // printf("byte[2] is %x\n", byte[2]);
+    // printf("byte[3] is %x\n", byte[3]);
     
     printf("Value of hex is %x\n", hex);
 
