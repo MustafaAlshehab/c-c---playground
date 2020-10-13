@@ -1,11 +1,9 @@
 #include <stdio.h>
-#include <string.h>
 
 #define UNAVAILABLE 1
 #define AVAILABLE 0
 
 void str_permutation(const char *str, int tree_level) {
-    int str_length = strlen(str);
     static char result[100] = {0};
     static int index_status[100] = {0};
 
