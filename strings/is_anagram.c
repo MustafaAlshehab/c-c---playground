@@ -7,6 +7,7 @@
 
 // Time complexity O(N)
 // Space complexity O(1)
+// accepts only small case letters
 int is_anagram_hash(const char *str1, const char *str2) {
     if(strlen(str1) != strlen(str2)) {
         return 0;
