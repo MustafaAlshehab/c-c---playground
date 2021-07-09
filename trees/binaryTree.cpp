@@ -20,9 +20,9 @@ public:
         root = nullptr;
     }
     void createTree();
-    void preOreder(Node *p);
-    void postOrder();
-    void inOrder();
+    void preOrder(Node *p);
+    void postOrder(Node *p);
+    void inOrder(Node *p);
     void levelOrder();
     void height(Node *root);
     Node * getRootNode() {
@@ -69,18 +69,49 @@ void Tree::createTree() {
     }
 }
 
-void Tree::preOreder(Node *p) {
+// Time complexity (2*n + 1) => O(n)
+// Space complexity (hight of a tree + 2) min of O(log n) max of O(n)
+// where n is number of nodes, in skewed tree space complexity will be at most
+void Tree::preOrder(Node *p) {
     if(p != nullptr) {
-        std::cout << p->data << " ";
-        preOreder(p->leftChild);
-        preOreder(p->rightChild);
+        std::cout << p->data << ' ';
+        preOrder(p->leftChild);
+        preOrder(p->rightChild);
+    }
+}
+
+// Time complexity (2*n + 1) => O(n)
+// Space complexity (hight of a tree + 2) min of O(log n) max of O(n)
+// where n is number of nodes, in skewed tree space complexity will be at most
+void Tree::inOrder(Node *p) {
+    if(p != nullptr) {
+        inOrder(p->leftChild);
+        std::cout << p->data << ' ';
+        inOrder(p->rightChild);
+    }
+}
+
+// Time complexity (2*n + 1) => O(n)
+// Space complexity (hight of a tree + 2) min of O(log n) max of O(n)
+// where n is number of nodes, in skewed tree space complexity will be at most
+void Tree::postOrder(Node *p) {
+    if(p != nullptr) {
+        postOrder(p->leftChild);
+        postOrder(p->rightChild);
+        std::cout << p->data << ' ';        
     }
 }
 
 int main() {
     Tree test;
     test.createTree();
-    test.preOreder(test.getRootNode());
+    std::cout << "Pre Order: ";
+    test.preOrder(test.getRootNode());
+    std::cout << '\n' <<"In Order: ";
+    test.inOrder(test.getRootNode());
+    std::cout << '\n' <<"Post Order: ";
+    test.postOrder(test.getRootNode());
+    std::cout << '\n';
 
     return 0;
 }
