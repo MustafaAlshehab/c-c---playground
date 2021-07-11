@@ -2,6 +2,9 @@
 
 #include <queue>
 #include <iostream>
+#include <stack>
+
+constexpr const int noNewNode = -1;
 
 class Tree 
 {
@@ -21,6 +24,7 @@ public:
     }
     void createTree();
     void preOrder(Node *p);
+    void preOrderIterative(Node *p);
     void postOrder(Node *p);
     void inOrder(Node *p);
     void levelOrder();
@@ -49,7 +53,7 @@ void Tree::createTree() {
         q.pop();
         std::cout << "Enter a value for leftChild of the node with value " << ptr->data << '\n';
         std::cin >> value;
-        if (value != -1) {
+        if (value != noNewNode) {
             temp = new Node;
             temp->data = value;
             temp->leftChild = temp->rightChild = 0;
@@ -59,7 +63,7 @@ void Tree::createTree() {
 
         std::cout << "Enter a value for rightChild of the node with value " << ptr->data << '\n';
         std::cin >> value;
-        if (value != -1) {
+        if (value != noNewNode) {
             temp = new Node;
             temp->data = value;
             temp->leftChild = temp->rightChild = 0;
@@ -102,14 +106,40 @@ void Tree::postOrder(Node *p) {
     }
 }
 
+void Tree::preOrderIterative(Node *p) {
+    std::stack<Node *> st;
+    if(p) {
+        st.push(p);
+    }
+    while (!st.empty()) {
+        std::cout << p->data << ' ';
+        while(p->leftChild) {
+            p = p->leftChild;
+            std::cout << p->data << ' ';
+            st.push(p);
+        }
+        st.pop();
+        while(!p->rightChild && !st.empty()) {
+            p = st.top();
+            st.pop();
+        }
+        if(p->rightChild) {
+            p = p->rightChild;
+            st.push(p);
+        }
+    }
+}
+
 int main() {
     Tree test;
     test.createTree();
     std::cout << "Pre Order: ";
     test.preOrder(test.getRootNode());
-    std::cout << '\n' <<"In Order: ";
+    std::cout << '\n' << "Pre Order (iterative): ";
+    test.preOrderIterative(test.getRootNode());
+    std::cout << '\n' << "In Order: ";
     test.inOrder(test.getRootNode());
-    std::cout << '\n' <<"Post Order: ";
+    std::cout << '\n' << "Post Order: ";
     test.postOrder(test.getRootNode());
     std::cout << '\n';
 
