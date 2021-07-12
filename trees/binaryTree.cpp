@@ -106,26 +106,21 @@ void Tree::postOrder(Node *p) {
     }
 }
 
+// Time complexity (2*n) => O(n)
+// Space complexity, stack max will be hight of the tree + 1 => O(h)
+// where h is the hight of the tree
 void Tree::preOrderIterative(Node *p) {
     std::stack<Node *> st;
-    if(p) {
-        st.push(p);
-    }
-    while (!st.empty()) {
-        std::cout << p->data << ' ';
-        while(p->leftChild) {
-            p = p->leftChild;
+
+    while (p || !st.empty()) {
+        if(p) {
             std::cout << p->data << ' ';
             st.push(p);
-        }
-        st.pop();
-        while(!p->rightChild && !st.empty()) {
+            p = p->leftChild;
+        } else {
             p = st.top();
             st.pop();
-        }
-        if(p->rightChild) {
             p = p->rightChild;
-            st.push(p);
         }
     }
 }
