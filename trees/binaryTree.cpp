@@ -25,8 +25,10 @@ public:
     void createTree();
     void preOrder(Node *p);
     void preOrderIterative(Node *p);
-    void postOrder(Node *p);
     void inOrder(Node *p);
+    void inOrderIterative(Node *p);
+    void postOrder(Node *p);
+    void postOrderIterative(Node *p);
     void levelOrder();
     void height(Node *root);
     Node * getRootNode() {
@@ -73,7 +75,7 @@ void Tree::createTree() {
     }
 }
 
-// Time complexity (2*n + 1) => O(n)
+// Time complexity (2*n + 1) => O(n), where n here is number of nodes
 // Space complexity (hight of a tree + 2) min of O(log n) max of O(n)
 // where n is number of nodes, in skewed tree space complexity will be at most
 void Tree::preOrder(Node *p) {
@@ -84,7 +86,7 @@ void Tree::preOrder(Node *p) {
     }
 }
 
-// Time complexity (2*n + 1) => O(n)
+// Time complexity (2*n + 1) => O(n), where n here is number of nodes
 // Space complexity (hight of a tree + 2) min of O(log n) max of O(n)
 // where n is number of nodes, in skewed tree space complexity will be at most
 void Tree::inOrder(Node *p) {
@@ -95,7 +97,7 @@ void Tree::inOrder(Node *p) {
     }
 }
 
-// Time complexity (2*n + 1) => O(n)
+// Time complexity (2*n + 1) => O(n), where n here is number of nodes
 // Space complexity (hight of a tree + 2) min of O(log n) max of O(n)
 // where n is number of nodes, in skewed tree space complexity will be at most
 void Tree::postOrder(Node *p) {
@@ -106,7 +108,7 @@ void Tree::postOrder(Node *p) {
     }
 }
 
-// Time complexity (2*n) => O(n)
+// Time complexity (2*n) => O(n), where n here is number of nodes
 // Space complexity, stack max will be hight of the tree + 1 => O(h)
 // where h is the hight of the tree
 void Tree::preOrderIterative(Node *p) {
@@ -125,6 +127,47 @@ void Tree::preOrderIterative(Node *p) {
     }
 }
 
+// Time complexity (2*n) => O(n), where n here is number of nodes
+// Space complexity, stack max will be hight of the tree + 1 => O(h)
+// where h is the hight of the tree
+void Tree::inOrderIterative(Node *p) {
+    std::stack<Node *> st;
+
+    while (p || !st.empty()) {
+        if(p) {
+            st.push(p);
+            p = p->leftChild;
+        } else {
+            p = st.top();
+            st.pop();
+            std::cout << p->data << ' ';
+            p = p->rightChild;
+        }
+    }
+}
+
+// Time complexity (2*n) => O(n), where n here is number of nodes
+// Space complexity, stack max will be hight of the tree + 1 => O(n)
+// where n is the hight of the tree
+void Tree::postOrderIterative(Node *p) {
+    std::stack<Node *> st;
+    Node * lastPrinted = nullptr;
+    while (p || !st.empty()) {
+        if(p) {
+            st.push(p);
+            p = p->leftChild;
+        } else {
+            Node * temp = st.top();
+            if (temp->rightChild && temp->rightChild != lastPrinted) {
+                p = temp->rightChild;
+            } else {
+                std::cout << temp->data << ' ';
+                lastPrinted = temp;
+                st.pop();
+            }
+        }
+    }
+}
 int main() {
     Tree test;
     test.createTree();
@@ -134,8 +177,12 @@ int main() {
     test.preOrderIterative(test.getRootNode());
     std::cout << '\n' << "In Order: ";
     test.inOrder(test.getRootNode());
+    std::cout << '\n' << "In Order (iterative): ";
+    test.inOrderIterative(test.getRootNode());
     std::cout << '\n' << "Post Order: ";
     test.postOrder(test.getRootNode());
+    std::cout << '\n' << "Post Order (iterative): ";
+    test.postOrderIterative(test.getRootNode());
     std::cout << '\n';
 
     return 0;
