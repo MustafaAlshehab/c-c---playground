@@ -22,6 +22,25 @@ public:
     Tree() {
         root = nullptr;
     }
+
+    ~Tree() {
+        std::queue<Node *> q;
+        if(root) {
+            q.push(root);
+        }
+
+        while(!q.empty()) {
+            Node * temp = q.front();
+            if(temp->leftChild) {
+                q.push(temp->leftChild);
+            }
+            if(temp->rightChild) {
+                q.push(temp->rightChild);
+            }
+            delete temp;
+            q.pop();
+        }
+    }
     void createTree();
     void preOrder(Node *p);
     void preOrderIterative(Node *p);
@@ -29,7 +48,7 @@ public:
     void inOrderIterative(Node *p);
     void postOrder(Node *p);
     void postOrderIterative(Node *p);
-    void levelOrder();
+    void levelOrder(Node *p);
     void height(Node *root);
     Node * getRootNode() {
         return root;
@@ -168,6 +187,26 @@ void Tree::postOrderIterative(Node *p) {
         }
     }
 }
+// Time complexity of O(n)
+// Space complexity of O(n)
+void Tree::levelOrder(Node *p) {
+    std::queue<Node *> q;
+    if(p) {
+        q.push(p);
+    }
+    while(!q.empty()) {
+        Node *temp = q.front();
+        if(temp->leftChild) {
+            q.push(temp->leftChild);
+        }
+        if(temp->rightChild) {
+            q.push(temp->rightChild);
+        }
+        std::cout << temp->data << ' ';
+        q.pop();
+    }
+}
+
 int main() {
     Tree test;
     test.createTree();
@@ -183,6 +222,8 @@ int main() {
     test.postOrder(test.getRootNode());
     std::cout << '\n' << "Post Order (iterative): ";
     test.postOrderIterative(test.getRootNode());
+    std::cout << '\n' << "Level Order (iterative): ";
+    test.levelOrder(test.getRootNode());
     std::cout << '\n';
 
     return 0;
