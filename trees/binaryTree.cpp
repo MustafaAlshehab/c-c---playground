@@ -3,19 +3,30 @@
 #include <queue>
 #include <iostream>
 #include <stack>
+#include <array>
 
 constexpr const int noNewNode = -1;
 
+
+class Node {
+public:
+    Node * leftChild, * rightChild;
+    int data;
+
+    Node();
+    Node(int data);
+};
+
+Node::Node() {};
+
+Node::Node(int data) {
+    leftChild = rightChild = nullptr;
+    this->data = data;
+}
 class Tree 
 {
 
 private:
-    struct Node
-    {
-        Node * leftChild, * rightChild;
-        int data;
-    };
-
     Node *root;
 
 public:
@@ -50,8 +61,13 @@ public:
     void postOrderIterative(Node *p);
     void levelOrder(Node *p);
     void height(Node *root);
+    Node * buildTreeFromTraversal(int inOrder[], int preOrder[], int inOrderStart, int inOrderEnd);
+    int helper(int inOrder[],int inOrderStart, int inOrderEnd, int data);
     Node * getRootNode() {
         return root;
+    }
+    void setRoot(Node *root) {
+        this->root = root;
     }
 };
 
@@ -207,23 +223,67 @@ void Tree::levelOrder(Node *p) {
     }
 }
 
+// Time complexity O(n^2), where n here is number of nodes
+// Space complexity O(n), depens on the hight of a tree
+// resources:
+// https://algorithms.tutorialhorizon.com/make-a-binary-tree-from-given-inorder-and-preorder-traveral/
+// https://www.geeksforgeeks.org/construct-tree-from-given-inorder-and-preorder-traversal/
+Node * Tree::buildTreeFromTraversal(int inOrder[], int preOrder[], int inOrderStart, int inOrderEnd) {
+    static int preOrderIndex = 0;
+
+    if (inOrderStart > inOrderEnd) {
+        return nullptr;
+    }
+
+    Node * p = new Node(preOrder[preOrderIndex++]);
+
+    if (inOrderStart == inOrderEnd) {
+        return p;
+    }
+
+    int splitIndex = helper(inOrder,inOrderStart,inOrderEnd,p->data);
+    p->leftChild = buildTreeFromTraversal(inOrder, preOrder, inOrderStart, splitIndex-1);
+    p->rightChild = buildTreeFromTraversal(inOrder,preOrder,splitIndex+1,inOrderEnd);
+
+    return p;
+}
+
+int Tree::helper(int inOrder[],int inOrderStart, int inOrderEnd, int data) {
+    for(int i = inOrderStart; i <= inOrderEnd; i++) {
+        if (inOrder[i] == data) {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 int main() {
-    Tree test;
-    test.createTree();
-    std::cout << "Pre Order: ";
-    test.preOrder(test.getRootNode());
-    std::cout << '\n' << "Pre Order (iterative): ";
-    test.preOrderIterative(test.getRootNode());
-    std::cout << '\n' << "In Order: ";
-    test.inOrder(test.getRootNode());
-    std::cout << '\n' << "In Order (iterative): ";
-    test.inOrderIterative(test.getRootNode());
-    std::cout << '\n' << "Post Order: ";
-    test.postOrder(test.getRootNode());
-    std::cout << '\n' << "Post Order (iterative): ";
-    test.postOrderIterative(test.getRootNode());
-    std::cout << '\n' << "Level Order (iterative): ";
-    test.levelOrder(test.getRootNode());
+    Tree t1;
+    t1.createTree();
+    std::cout << "Tree 1: Pre Order: ";
+    t1.preOrder(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: Pre Order (iterative): ";
+    t1.preOrderIterative(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: In Order: ";
+    t1.inOrder(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: In Order (iterative): ";
+    t1.inOrderIterative(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: Post Order: ";
+    t1.postOrder(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: Post Order (iterative): ";
+    t1.postOrderIterative(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: Level Order (iterative): ";
+    t1.levelOrder(t1.getRootNode());
+
+    int preOrder[] = {1,2,3,4,5,6,7};
+    int inOrder[] = {3,2,4,1,6,5,7};
+    int inOrderSize = sizeof(inOrder) / sizeof(inOrder[0]) - 1;
+    Tree t2;
+    Node * root = t2.buildTreeFromTraversal(inOrder,preOrder,0,inOrderSize);
+    t2.setRoot(root);
+    std::cout << '\n' << "Tree 2: Pre Order: ";
+    t2.preOrder(t2.getRootNode());
     std::cout << '\n';
 
     return 0;
