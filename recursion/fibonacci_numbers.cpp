@@ -5,10 +5,8 @@
 // time O(2^n) since each function will call 2 functions 
 // space O(n) since the call stack will have (n) functions at a time
 unsigned long nth_fibonacci_rec(int n) {
-    if (n == 1){
-        return 0;
-    } else if (n == 2){
-        return 1;
+    if (n < 2){
+        return n;
     } else {
         return nth_fibonacci_rec(n - 1) + nth_fibonacci_rec(n - 2);
     }
@@ -26,7 +24,7 @@ unsigned long nth_fibonacci_rec(int n) {
 long unsigned nth_fibonacci_rec_optimized(int n, std::unordered_map<int, long unsigned> &fib_result);
 
 long unsigned nth_fibonacci_rec_optimized(int n){
-    std::unordered_map<int, long unsigned> fib_result({{1,0}, {2,1}});
+    std::unordered_map<int, long unsigned> fib_result({{0,0}, {1,1}});
     return nth_fibonacci_rec_optimized(n, fib_result);
 }
 
@@ -47,14 +45,14 @@ long unsigned nth_fibonacci_rec_optimized(int n, std::unordered_map<int, long un
 // Space complexity O(1) we are only using an array of size 2 
 unsigned long nth_fibonacci_iterative(int n) {
     unsigned long fib_result[2] = {0, 1};
-    int counter = 3;
+    int counter = 2;
     while (counter <= n) {
         unsigned long next_fib = fib_result[0] + fib_result[1];
         fib_result[0] = fib_result[1];
         fib_result[1] = next_fib;
         counter++;
     }
-    return n > 1 ? fib_result[1] : fib_result[0];
+    return n >= 1 ? fib_result[1] : fib_result[0];
 }
     
 int main() {
@@ -62,8 +60,8 @@ int main() {
     std::cout << "enter a number" << '\n';
     std::cin >> input;
     //unsigned long result = nth_fibonacci_rec(input);
-    unsigned long result = nth_fibonacci_rec_optimized(input);
-    //unsigned long result = nth_fibonacci_iterative(input);
+    // unsigned long result = nth_fibonacci_rec_optimized(input);
+    unsigned long result = nth_fibonacci_iterative(input);
     std::cout << result << '\n';
 
     return 0; 
