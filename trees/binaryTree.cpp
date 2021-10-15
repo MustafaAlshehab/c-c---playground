@@ -59,6 +59,7 @@ public:
     void inOrderIterative(Node *p);
     void postOrder(Node *p);
     void postOrderIterative(Node *p);
+    void postOrderIterative2(Node *p);
     void levelOrder(Node *p);
     void height(Node *root);
     Node * buildTreeFromTraversal(int inOrder[], int preOrder[], int inOrderStart, int inOrderEnd);
@@ -203,6 +204,37 @@ void Tree::postOrderIterative(Node *p) {
         }
     }
 }
+
+// Time complexity of O(n)
+// Space complexity of O(n)
+void Tree::postOrderIterative2(Node *p) {
+    if(!p) {
+        return;
+    }
+    
+    std::stack<Node *> resultSt;
+    std::stack<Node *> st;
+
+    st.push(p);
+    
+    while(!st.empty()) {
+        Node *temp = st.top();
+        st.pop();
+        resultSt.push(temp);
+        if(temp->leftChild) {
+            st.push(temp->leftChild);
+        }
+        if(temp->rightChild) {
+            st.push(temp->rightChild);
+        }
+    }
+    
+    while(!resultSt.empty()) {
+        std::cout << resultSt.top()->data << ' ';
+        resultSt.pop();
+    }
+}
+
 // Time complexity of O(n)
 // Space complexity of O(n)
 void Tree::levelOrder(Node *p) {
@@ -273,6 +305,8 @@ int main() {
     t1.postOrder(t1.getRootNode());
     std::cout << '\n' << "Tree 1: Post Order (iterative): ";
     t1.postOrderIterative(t1.getRootNode());
+    std::cout << '\n' << "Tree 1: Post Order (iterative2): ";
+    t1.postOrderIterative2(t1.getRootNode());
     std::cout << '\n' << "Tree 1: Level Order (iterative): ";
     t1.levelOrder(t1.getRootNode());
 
